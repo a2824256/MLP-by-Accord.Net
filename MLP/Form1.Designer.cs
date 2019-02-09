@@ -39,16 +39,23 @@
             this.TestRows = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.TotalRows = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.Accuracy = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.Epoch = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(309, 39);
+            this.textBox1.Location = new System.Drawing.Point(309, 50);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(479, 32);
+            this.textBox1.Size = new System.Drawing.Size(202, 32);
             this.textBox1.TabIndex = 1;
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label1
@@ -73,7 +80,7 @@
             // 
             // select_button
             // 
-            this.select_button.Location = new System.Drawing.Point(15, 39);
+            this.select_button.Location = new System.Drawing.Point(15, 50);
             this.select_button.Name = "select_button";
             this.select_button.Size = new System.Drawing.Size(126, 32);
             this.select_button.TabIndex = 5;
@@ -83,7 +90,7 @@
             // 
             // load_button
             // 
-            this.load_button.Location = new System.Drawing.Point(166, 39);
+            this.load_button.Location = new System.Drawing.Point(166, 50);
             this.load_button.Name = "load_button";
             this.load_button.Size = new System.Drawing.Size(124, 32);
             this.load_button.TabIndex = 6;
@@ -106,22 +113,24 @@
             this.content_box.Location = new System.Drawing.Point(166, 107);
             this.content_box.Multiline = true;
             this.content_box.Name = "content_box";
-            this.content_box.Size = new System.Drawing.Size(622, 316);
+            this.content_box.Size = new System.Drawing.Size(345, 316);
             this.content_box.TabIndex = 9;
             // 
             // TrainingRows
             // 
-            this.TrainingRows.Location = new System.Drawing.Point(15, 199);
+            this.TrainingRows.Location = new System.Drawing.Point(15, 184);
             this.TrainingRows.Name = "TrainingRows";
             this.TrainingRows.Size = new System.Drawing.Size(126, 21);
             this.TrainingRows.TabIndex = 10;
+            this.TrainingRows.Text = "240000";
             // 
             // TestRows
             // 
-            this.TestRows.Location = new System.Drawing.Point(15, 272);
+            this.TestRows.Location = new System.Drawing.Point(15, 238);
             this.TestRows.Name = "TestRows";
             this.TestRows.Size = new System.Drawing.Size(126, 21);
             this.TestRows.TabIndex = 11;
+            this.TestRows.Text = "10000";
             // 
             // label2
             // 
@@ -135,17 +144,75 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 243);
+            this.label3.Location = new System.Drawing.Point(12, 223);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 13;
             this.label3.Text = "Test rows";
             // 
+            // TotalRows
+            // 
+            this.TotalRows.Location = new System.Drawing.Point(15, 293);
+            this.TotalRows.Name = "TotalRows";
+            this.TotalRows.Size = new System.Drawing.Size(126, 21);
+            this.TotalRows.TabIndex = 14;
+            this.TotalRows.Text = "250000\r\n\r\n";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(13, 278);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 12);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Total rows";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(164, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(59, 12);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Accuracy:";
+            // 
+            // Accuracy
+            // 
+            this.Accuracy.Location = new System.Drawing.Point(229, 10);
+            this.Accuracy.Name = "Accuracy";
+            this.Accuracy.Size = new System.Drawing.Size(126, 21);
+            this.Accuracy.TabIndex = 30;
+            this.Accuracy.Text = "0%";
+            this.Accuracy.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(13, 336);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(77, 12);
+            this.label13.TabIndex = 31;
+            this.label13.Text = "Epoch number";
+            // 
+            // Epoch
+            // 
+            this.Epoch.Location = new System.Drawing.Point(15, 351);
+            this.Epoch.Name = "Epoch";
+            this.Epoch.Size = new System.Drawing.Size(126, 21);
+            this.Epoch.TabIndex = 32;
+            this.Epoch.Text = "1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(537, 450);
+            this.Controls.Add(this.Epoch);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.Accuracy);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.TotalRows);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TestRows);
@@ -177,6 +244,12 @@
         private System.Windows.Forms.TextBox TestRows;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox TotalRows;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox Accuracy;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox Epoch;
     }
 }
 
