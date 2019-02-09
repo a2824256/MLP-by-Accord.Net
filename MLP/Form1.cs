@@ -166,8 +166,9 @@ namespace MLP
                     Convert.ToDouble(dr[28]),Convert.ToDouble(dr[29])};
                 int real_res = Convert.ToInt32(dr[30]);
                 double[] res = network.Compute(input);
+                int class_index = getIndex(res);
                 content_box.Text += res[0].ToString()+"," + res[1].ToString() + "," + res[2].ToString() + "," + res[3].ToString() + "," + res[4].ToString() + "," + res[5].ToString() + "," + "\r\n";
-                content_box.Text += "real:" + real_res.ToString() + ",res:" + res[real_res].ToString() + "\r\n";
+                content_box.Text += "real:" + real_res.ToString() + ",res:" + class_index.ToString() + "\r\n";
                 if (res[real_res]==1)
                 {
                     right++;
