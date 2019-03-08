@@ -20,9 +20,7 @@ namespace MLP
     {
 
         public static ActivationNetwork network = new ActivationNetwork(
-             new BipolarSigmoidFunction(2), // Activation function
-               inputsCount: 30,
-               neuronsCount: new []{ 30, 6});
+             new BipolarSigmoidFunction(2), 30, 15, 6);
         public BackPropagationLearning bp = new BackPropagationLearning(network);
         public DataTable dt;
         public string csv_file = "";
