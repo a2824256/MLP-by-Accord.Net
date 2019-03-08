@@ -23,8 +23,8 @@ namespace MLP
              new BipolarSigmoidFunction(2), // Activation function
                inputsCount: 30,
                neuronsCount: new []{ 30, 6});
-        public  BackPropagationLearning bp = new BackPropagationLearning(network);
-        public  DataTable dt;
+        public BackPropagationLearning bp = new BackPropagationLearning(network);
+        public DataTable dt;
         public string csv_file = "";
         public  double error = 100.0;
         public  int train_number = 0;
@@ -70,6 +70,8 @@ namespace MLP
 
         public void train()
         {
+            new GaussianWeights(network, 0.1).Randomize();
+            //bp.LearningRate = 0.1;
             for (int epoch_num = 0; epoch_num < epoch; epoch_num++)
             {
                 int count = 0;
@@ -167,15 +169,15 @@ namespace MLP
                 int real_res = Convert.ToInt32(dr[30]);
                 double[] res = network.Compute(input);
                 int class_index = getIndex(res);
-                content_box.Text += res[0].ToString()+"," + res[1].ToString() + "," + res[2].ToString() + "," + res[3].ToString() + "," + res[4].ToString() + "," + res[5].ToString() + "," + "\r\n";
-                content_box.Text += "real:" + real_res.ToString() + ",res:" + class_index.ToString() + "\r\n";
-                if (res[real_res]==1)
+                //content_box.Text += res[0].ToString()+"," + res[1].ToString() + "," + res[2].ToString() + "," + res[3].ToString() + "," + res[4].ToString() + "," + res[5].ToString() + "," + "\r\n";
+                //content_box.Text += "real:" + real_res.ToString() + ",res:" + class_index.ToString() + "\r\n";
+                if (real_res == GetMaxIndex(res))
                 {
                     right++;
                 }
                 count++;
             }
-            double final_accuracy = (right / test_number)*100;
+            double final_accuracy = ((double)right / (double)test_number)*100;
             Accuracy.Text = final_accuracy.ToString() + "%";
         }
 
@@ -231,6 +233,19 @@ namespace MLP
             }
             reader.Close();
             return dt;
+        }
+
+        public int GetMaxIndex(double[] arr)
+        {
+            int max_index = 0;
+            for(int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] >= arr[max_index])
+                {
+                    max_index = i;
+                }
+            }
+            return max_index;
         }
     }
 }
