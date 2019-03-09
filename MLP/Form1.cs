@@ -271,9 +271,7 @@ namespace MLP
             count = 10000;
             int[][] inputs = new int [count][];
             string[] labels = new string[count];
-            //string[] labels = new string[count];
             int num = 0;
-            //inputs = 
             foreach (DataRow dr in dt.Rows)
             {
                 if (num >= 10000)
