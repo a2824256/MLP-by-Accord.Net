@@ -45,15 +45,23 @@
             this.Accuracy = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.Epoch = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.GetRules = new System.Windows.Forms.Button();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(309, 50);
+            this.textBox1.Location = new System.Drawing.Point(6, 69);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(202, 32);
+            this.textBox1.Size = new System.Drawing.Size(288, 48);
             this.textBox1.TabIndex = 1;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -61,7 +69,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Location = new System.Drawing.Point(16, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 12);
             this.label1.TabIndex = 3;
@@ -72,7 +80,7 @@
             // 
             this.status.AutoSize = true;
             this.status.ForeColor = System.Drawing.Color.Coral;
-            this.status.Location = new System.Drawing.Point(54, 13);
+            this.status.Location = new System.Drawing.Point(55, 10);
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(65, 12);
             this.status.TabIndex = 4;
@@ -80,9 +88,9 @@
             // 
             // select_button
             // 
-            this.select_button.Location = new System.Drawing.Point(15, 50);
+            this.select_button.Location = new System.Drawing.Point(6, 20);
             this.select_button.Name = "select_button";
-            this.select_button.Size = new System.Drawing.Size(126, 32);
+            this.select_button.Size = new System.Drawing.Size(288, 32);
             this.select_button.TabIndex = 5;
             this.select_button.Text = "Select File";
             this.select_button.UseVisualStyleBackColor = true;
@@ -90,7 +98,7 @@
             // 
             // load_button
             // 
-            this.load_button.Location = new System.Drawing.Point(166, 50);
+            this.load_button.Location = new System.Drawing.Point(6, 20);
             this.load_button.Name = "load_button";
             this.load_button.Size = new System.Drawing.Size(124, 32);
             this.load_button.TabIndex = 6;
@@ -100,7 +108,7 @@
             // 
             // test_button
             // 
-            this.test_button.Location = new System.Drawing.Point(15, 107);
+            this.test_button.Location = new System.Drawing.Point(6, 76);
             this.test_button.Name = "test_button";
             this.test_button.Size = new System.Drawing.Size(126, 32);
             this.test_button.TabIndex = 8;
@@ -110,15 +118,15 @@
             // 
             // content_box
             // 
-            this.content_box.Location = new System.Drawing.Point(166, 107);
+            this.content_box.Location = new System.Drawing.Point(390, 180);
             this.content_box.Multiline = true;
             this.content_box.Name = "content_box";
-            this.content_box.Size = new System.Drawing.Size(345, 316);
+            this.content_box.Size = new System.Drawing.Size(398, 125);
             this.content_box.TabIndex = 9;
             // 
             // TrainingRows
             // 
-            this.TrainingRows.Location = new System.Drawing.Point(15, 184);
+            this.TrainingRows.Location = new System.Drawing.Point(151, 87);
             this.TrainingRows.Name = "TrainingRows";
             this.TrainingRows.Size = new System.Drawing.Size(126, 21);
             this.TrainingRows.TabIndex = 10;
@@ -126,7 +134,7 @@
             // 
             // TestRows
             // 
-            this.TestRows.Location = new System.Drawing.Point(15, 238);
+            this.TestRows.Location = new System.Drawing.Point(315, 35);
             this.TestRows.Name = "TestRows";
             this.TestRows.Size = new System.Drawing.Size(126, 21);
             this.TestRows.TabIndex = 11;
@@ -135,7 +143,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 169);
+            this.label2.Location = new System.Drawing.Point(149, 72);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 12);
             this.label2.TabIndex = 12;
@@ -144,7 +152,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 223);
+            this.label3.Location = new System.Drawing.Point(312, 20);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 13;
@@ -152,7 +160,7 @@
             // 
             // TotalRows
             // 
-            this.TotalRows.Location = new System.Drawing.Point(15, 293);
+            this.TotalRows.Location = new System.Drawing.Point(152, 35);
             this.TotalRows.Name = "TotalRows";
             this.TotalRows.Size = new System.Drawing.Size(126, 21);
             this.TotalRows.TabIndex = 14;
@@ -161,7 +169,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 278);
+            this.label4.Location = new System.Drawing.Point(150, 20);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 12);
             this.label4.TabIndex = 15;
@@ -170,7 +178,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(164, 13);
+            this.label5.Location = new System.Drawing.Point(585, 13);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 16;
@@ -178,7 +186,7 @@
             // 
             // Accuracy
             // 
-            this.Accuracy.Location = new System.Drawing.Point(229, 10);
+            this.Accuracy.Location = new System.Drawing.Point(650, 10);
             this.Accuracy.Name = "Accuracy";
             this.Accuracy.Size = new System.Drawing.Size(126, 21);
             this.Accuracy.TabIndex = 30;
@@ -188,7 +196,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(13, 336);
+            this.label13.Location = new System.Drawing.Point(312, 72);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(77, 12);
             this.label13.TabIndex = 31;
@@ -196,37 +204,93 @@
             // 
             // Epoch
             // 
-            this.Epoch.Location = new System.Drawing.Point(15, 351);
+            this.Epoch.Location = new System.Drawing.Point(314, 87);
             this.Epoch.Name = "Epoch";
             this.Epoch.Size = new System.Drawing.Size(126, 21);
             this.Epoch.TabIndex = 32;
             this.Epoch.Text = "1";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.Epoch);
+            this.groupBox1.Controls.Add(this.load_button);
+            this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.test_button);
+            this.groupBox1.Controls.Add(this.TotalRows);
+            this.groupBox1.Controls.Add(this.TestRows);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.TrainingRows);
+            this.groupBox1.Location = new System.Drawing.Point(12, 37);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(464, 125);
+            this.groupBox1.TabIndex = 33;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Part One : Artificial Neural Networks";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(388, 165);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(47, 12);
+            this.label6.TabIndex = 33;
+            this.label6.Text = "Output:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.GetRules);
+            this.groupBox2.Location = new System.Drawing.Point(12, 165);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(363, 140);
+            this.groupBox2.TabIndex = 34;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Part Two : Pattern Discovery";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.select_button);
+            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Location = new System.Drawing.Point(482, 37);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(306, 125);
+            this.groupBox3.TabIndex = 35;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Load File";
+            // 
+            // GetRules
+            // 
+            this.GetRules.Location = new System.Drawing.Point(28, 35);
+            this.GetRules.Name = "GetRules";
+            this.GetRules.Size = new System.Drawing.Size(288, 32);
+            this.GetRules.TabIndex = 6;
+            this.GetRules.Text = "Get rules";
+            this.GetRules.UseVisualStyleBackColor = true;
+            this.GetRules.Click += new System.EventHandler(this.GetRules_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 450);
-            this.Controls.Add(this.Epoch);
-            this.Controls.Add(this.label13);
+            this.ClientSize = new System.Drawing.Size(801, 316);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Accuracy);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.TotalRows);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.TestRows);
-            this.Controls.Add(this.TrainingRows);
             this.Controls.Add(this.content_box);
-            this.Controls.Add(this.test_button);
-            this.Controls.Add(this.load_button);
-            this.Controls.Add(this.select_button);
             this.Controls.Add(this.status);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
             this.Name = "Form1";
             this.Text = "MLP by Accord - Author Alex Leung";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,6 +314,11 @@
         private System.Windows.Forms.TextBox Accuracy;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox Epoch;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button GetRules;
     }
 }
 

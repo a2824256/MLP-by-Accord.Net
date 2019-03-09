@@ -11,8 +11,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Accord;
+using Accord.MachineLearning.DecisionTrees;
+using Accord.MachineLearning.DecisionTrees.Learning;
+using Accord.MachineLearning.DecisionTrees.Rules;
+using Accord.Math.Optimization.Losses;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
+using Accord.Statistics.Filters;
 
 namespace MLP
 {
@@ -80,7 +85,7 @@ namespace MLP
                         Console.WriteLine(count);
                         break;
                     }
-                    double[] input = { Convert.ToDouble(dr[0]), Convert.ToDouble(dr[1]), Convert.ToDouble(dr[2]),Convert.ToDouble(dr[3]),Convert.ToDouble(dr[4]),Convert.ToDouble(dr[5]),Convert.ToDouble(dr[6]),
+                    double[] input = {Convert.ToDouble(dr[0]), Convert.ToDouble(dr[1]), Convert.ToDouble(dr[2]),Convert.ToDouble(dr[3]),Convert.ToDouble(dr[4]),Convert.ToDouble(dr[5]),Convert.ToDouble(dr[6]),
                     Convert.ToDouble(dr[7]),Convert.ToDouble(dr[8]),Convert.ToDouble(dr[9]),Convert.ToDouble(dr[10]),Convert.ToDouble(dr[11]),Convert.ToDouble(dr[12]),Convert.ToDouble(dr[13]),
                     Convert.ToDouble(dr[14]),Convert.ToDouble(dr[15]),Convert.ToDouble(dr[16]),Convert.ToDouble(dr[17]),Convert.ToDouble(dr[18]),Convert.ToDouble(dr[19]),Convert.ToDouble(dr[20]),
                     Convert.ToDouble(dr[21]),Convert.ToDouble(dr[22]),Convert.ToDouble(dr[23]),Convert.ToDouble(dr[24]),Convert.ToDouble(dr[25]),Convert.ToDouble(dr[26]),Convert.ToDouble(dr[27]),
@@ -175,6 +180,7 @@ namespace MLP
                 }
                 count++;
             }
+            content_box.Text += right.ToString() + "\r\n";
             double final_accuracy = ((double)right / (double)test_number)*100;
             Accuracy.Text = final_accuracy.ToString() + "%";
         }
@@ -196,7 +202,6 @@ namespace MLP
             DataTable dt = new DataTable();
             StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default, false);
             int m = 0;
-            bool sw = false;
             DataColumn column; //列名
             for (int c = 0; c < 31; c++)
             {
@@ -244,6 +249,103 @@ namespace MLP
                 }
             }
             return max_index;
+        }
+
+        private void GetRules_Click(object sender, EventArgs e)
+        {
+            if (this.csv_file == "")
+            {
+                content_box.Text += "Please select the CSV file!\r\n";
+            }
+            else
+            {
+                dt = CsvToDataTable(this.csv_file, 0);
+                string str = GetRules2String();
+                content_box.Text += str;
+            }
+        }
+
+        public string GetRules2String()
+        {
+            int count = dt.Rows.Count;
+            count = 10000;
+            int[][] inputs = new int [count][];
+            string[] labels = new string[count];
+            //string[] labels = new string[count];
+            int num = 0;
+            //inputs = 
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (num >= 10000)
+                {
+                    break;
+                }
+                //Console.WriteLine(dr[30].ToString());
+                int res = Convert.ToInt32(dr[30]);
+                inputs[num] = new int[]{
+                    Convert.ToInt32(dr[0]), Convert.ToInt32(dr[1]), Convert.ToInt32(dr[2]),Convert.ToInt32(dr[3]),Convert.ToInt32(dr[4]),Convert.ToInt32(dr[5]),Convert.ToInt32(dr[6]),
+                    Convert.ToInt32(dr[7]),Convert.ToInt32(dr[8]),Convert.ToInt32(dr[9]),Convert.ToInt32(dr[10]),Convert.ToInt32(dr[11]),Convert.ToInt32(dr[12]),Convert.ToInt32(dr[13]),
+                    Convert.ToInt32(dr[14]),Convert.ToInt32(dr[15]),Convert.ToInt32(dr[16]),Convert.ToInt32(dr[17]),Convert.ToInt32(dr[18]),Convert.ToInt32(dr[19]),Convert.ToInt32(dr[20]),
+                    Convert.ToInt32(dr[21]),Convert.ToInt32(dr[22]),Convert.ToInt32(dr[23]),Convert.ToInt32(dr[24]),Convert.ToInt32(dr[25]),Convert.ToInt32(dr[26]),Convert.ToInt32(dr[27]),
+                    Convert.ToInt32(dr[28]),Convert.ToInt32(dr[29])};
+                labels[num] = "type-"+res.ToString();
+                num++;
+            }
+            var codebook = new Codification("Output", labels);
+            int[] outputs = codebook.Transform("Output", labels);
+            //for (int i = 0; i < outputs.Length;i++)
+            //{
+            //    Console.WriteLine(outputs[i].ToString());
+            //}
+            //return "";
+            var teacher = new C45Learning()
+            {
+                new DecisionVariable("sensor 1", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 2", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 3", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 4", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 5", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 6", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 7", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 8", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 9", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 10", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 11", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 12", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 13", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 14", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 15", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 16", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 17", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 18", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 19", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 20", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 21", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 22", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 23", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 24", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 25", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 26", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 27", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 28", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 29", DecisionVariableKind.Continuous),
+                new DecisionVariable("sensor 30", DecisionVariableKind.Continuous),
+            };
+            DecisionTree tree = teacher.Learn(inputs, outputs);
+
+            // To get the estimated class labels, we can use
+            int[] predicted = tree.Decide(inputs);
+
+            // The classification error (0.0266) can be computed as 
+            double error = new ZeroOneLoss(outputs).Loss(predicted);
+
+            // Moreover, we may decide to convert our tree to a set of rules:
+            DecisionSet rules = tree.ToRules();
+
+            // And using the codebook, we can inspect the tree reasoning:
+            string ruleText = rules.ToString(codebook, "Output",System.Globalization.CultureInfo.InvariantCulture);
+            Console.WriteLine(ruleText);
+            return ruleText;
         }
     }
 }
