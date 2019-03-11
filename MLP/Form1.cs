@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Accord;
 using Accord.MachineLearning.DecisionTrees;
 using Accord.MachineLearning.DecisionTrees.Learning;
 using Accord.MachineLearning.DecisionTrees.Rules;
@@ -24,20 +15,18 @@ namespace MLP
     public partial class Form1 : Form
     {
 
-        public static ActivationNetwork network = new ActivationNetwork(
-             new BipolarSigmoidFunction(2), 30, 15, 6);
-        public BackPropagationLearning bp = new BackPropagationLearning(network);
+        public static ActivationNetwork network;
+        public BackPropagationLearning bp;
         public DataTable dt;
         public string csv_file = "";
-        public  double error = 100.0;
-        public  int train_number = 0;
-        public  int test_number = 0;
-        public  int total_rows = 0;
-        public  int epoch = 0;
+        public double error = 100.0;
+        public int train_number = 0;
+        public int test_number = 0;
+        public int epoch = 0;
         public Form1()
         {
             InitializeComponent();
-
+            content_box.ScrollBars = ScrollBars.Horizontal;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -57,41 +46,52 @@ namespace MLP
 
         private void select_button_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();     //显示选择文件对话框
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();     
             openFileDialog1.InitialDirectory = "c:\\";
+            //Can only select csv files
             openFileDialog1.Filter = "csv files (*.csv)|*.csv";
             openFileDialog1.FilterIndex = 2;
             openFileDialog1.RestoreDirectory = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                this.textBox1.Text = openFileDialog1.FileName;          //显示文件路径
-                this.csv_file = openFileDialog1.FileName;
-                status.Text = "file selected";
+                textBox1.Text = openFileDialog1.FileName;
+                csv_file = openFileDialog1.FileName;
             }
         }
 
-        public void train()
+        //training the ANN
+        public void Train()
         {
-            new GaussianWeights(network, 0.1).Randomize();
-            //bp.LearningRate = 0.1;
+            //clear the textbox
+            content_box.Text = "";
+            try
+            {
+                double gaussian = Convert.ToDouble(gw.Text);
+                //use Gaussian init the Weights
+                new GaussianWeights(network, gaussian).Randomize();
+                bp.LearningRate = Convert.ToDouble(lr.Text);
+                bp.Momentum = Convert.ToDouble(momentum.Text);
+            }
+            //if input the If you enter a non-numeric string
+            catch
+            {
+                new GaussianWeights(network, 0.1).Randomize();
+                bp.LearningRate = 0.1;
+                bp.Momentum = 0.0;
+            }
             for (int epoch_num = 0; epoch_num < epoch; epoch_num++)
             {
                 int count = 0;
-                foreach (DataRow dr in dt.Rows)
+                for(int i = 0; i < train_number; i++)
                 {
-                    if (count >= train_number)
+                    double[] input = new double[30];
+                    for (int sensor_i = 0; sensor_i < 30; sensor_i++)
                     {
-                        Console.WriteLine(count);
-                        break;
+                        input[sensor_i] = Convert.ToDouble(dt.Rows[i][sensor_i]);
                     }
-                    double[] input = {Convert.ToDouble(dr[0]), Convert.ToDouble(dr[1]), Convert.ToDouble(dr[2]),Convert.ToDouble(dr[3]),Convert.ToDouble(dr[4]),Convert.ToDouble(dr[5]),Convert.ToDouble(dr[6]),
-                    Convert.ToDouble(dr[7]),Convert.ToDouble(dr[8]),Convert.ToDouble(dr[9]),Convert.ToDouble(dr[10]),Convert.ToDouble(dr[11]),Convert.ToDouble(dr[12]),Convert.ToDouble(dr[13]),
-                    Convert.ToDouble(dr[14]),Convert.ToDouble(dr[15]),Convert.ToDouble(dr[16]),Convert.ToDouble(dr[17]),Convert.ToDouble(dr[18]),Convert.ToDouble(dr[19]),Convert.ToDouble(dr[20]),
-                    Convert.ToDouble(dr[21]),Convert.ToDouble(dr[22]),Convert.ToDouble(dr[23]),Convert.ToDouble(dr[24]),Convert.ToDouble(dr[25]),Convert.ToDouble(dr[26]),Convert.ToDouble(dr[27]),
-                    Convert.ToDouble(dr[28]),Convert.ToDouble(dr[29])};
                     double[] output = new double[6];
-                    switch (dr[30])
+                    switch (dt.Rows[i][30])
                     {
                         case 0:
                             output = new double[6] { 1, 0, 0, 0, 0, 0 };
@@ -121,127 +121,36 @@ namespace MLP
 
         public void load_button_Click(object sender, EventArgs e)
         {
-            if(this.csv_file == "")
+            if(csv_file == "")
             {
-                content_box.Text += "Please select the CSV file!\r\n";
+                content_box.Text += "Data set not yet selected!\r\n";
             }
             else
             {
-                dt = CsvToDataTable(this.csv_file, 0);
+                //example input:15,15,15,
+                String nodes_str = nodes.Text;
+                String[] nodes_str_arr = nodes_str.Split(',');
+                int[] n = new int[nodes_str_arr.Length+1];
+                for (int index = 0; index < nodes_str_arr.Length; index++)
+                {
+                    n[index] = Convert.ToInt32(nodes_str_arr[index]);
+                }
+                //output layer is fixed(6)
+                n[nodes_str_arr.Length] = 6;
+                network = new ActivationNetwork(new BipolarSigmoidFunction(2), 30, n);
+                bp = new BackPropagationLearning(network);
+                dt = Csv2DataTable(this.csv_file, 0);
                 train_number = Convert.ToInt32(TrainingRows.Text);
                 test_number = Convert.ToInt32(TestRows.Text);
-                total_rows = Convert.ToInt32(TotalRows.Text);
                 epoch = Convert.ToInt32(Epoch.Text);
-                train();
+                Train();
             }
-        }
-
-        public int getIndex(double[] array)
-        {
-            int max_index = 0;
-            for(int i = 0; i < array.Length; i++)
-            {
-                if (array[i] > array[max_index])
-                {
-                    max_index = i;
-                }
-            }
-            return max_index;
-        }
-
-        public void test()
-        {
-            int count = 0;
-            int right = 0;
-            foreach (DataRow dr in dt.Rows)
-            {
-                if (count < train_number)
-                {
-                    count++;
-                    continue;
-                }
-                if(count > (train_number + test_number))
-                {
-                    break;
-                }
-                double[] input = { Convert.ToDouble(dr[0]), Convert.ToDouble(dr[1]), Convert.ToDouble(dr[2]),Convert.ToDouble(dr[3]),Convert.ToDouble(dr[4]),Convert.ToDouble(dr[5]),Convert.ToDouble(dr[6]),
-                    Convert.ToDouble(dr[7]),Convert.ToDouble(dr[8]),Convert.ToDouble(dr[9]),Convert.ToDouble(dr[10]),Convert.ToDouble(dr[11]),Convert.ToDouble(dr[12]),Convert.ToDouble(dr[13]),
-                    Convert.ToDouble(dr[14]),Convert.ToDouble(dr[15]),Convert.ToDouble(dr[16]),Convert.ToDouble(dr[17]),Convert.ToDouble(dr[18]),Convert.ToDouble(dr[19]),Convert.ToDouble(dr[20]),
-                    Convert.ToDouble(dr[21]),Convert.ToDouble(dr[22]),Convert.ToDouble(dr[23]),Convert.ToDouble(dr[24]),Convert.ToDouble(dr[25]),Convert.ToDouble(dr[26]),Convert.ToDouble(dr[27]),
-                    Convert.ToDouble(dr[28]),Convert.ToDouble(dr[29])};
-                int real_res = Convert.ToInt32(dr[30]);
-                double[] res = network.Compute(input);
-                int class_index = getIndex(res);
-                //content_box.Text += res[0].ToString()+"," + res[1].ToString() + "," + res[2].ToString() + "," + res[3].ToString() + "," + res[4].ToString() + "," + res[5].ToString() + "," + "\r\n";
-                //content_box.Text += "real:" + real_res.ToString() + ",res:" + class_index.ToString() + "\r\n";
-                if (real_res == GetMaxIndex(res))
-                {
-                    right++;
-                }
-                count++;
-            }
-            content_box.Text += right.ToString() + "\r\n";
-            double final_accuracy = ((double)right / (double)test_number)*100;
-            Accuracy.Text = final_accuracy.ToString() + "%";
-        }
-
-        private void test_button_Click(object sender, EventArgs e)
-        {
-            if (this.csv_file == "")
-            {
-                content_box.Text += "Please select the CSV file!\r\n";
-            }
-            else
-            {
-                test();
-            }
-        }
-
-        public DataTable CsvToDataTable(string filePath, int n)
-        {
-            DataTable dt = new DataTable();
-            StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default, false);
-            int m = 0;
-            DataColumn column; //列名
-            for (int c = 0; c < 31; c++)
-            {
-                column = new DataColumn();
-                column.DataType = Type.GetType("System.String");
-                column.ColumnName = c.ToString();
-                //content_box.Text += column.ColumnName;
-                dt.Columns.Add(column);
-            }
-            //column = new DataColumn();
-            //column.DataType = Type.GetType("System.String");
-            //column.ColumnName = "res";
-            //dt.Columns.Add(column);
-            //Console.Write(column.ColumnName);
-            //Console.WriteLine("\r\n");
-            while (!reader.EndOfStream)
-            {
-                m = m + 1;
-                string str = reader.ReadLine();
-                string[] split = str.Split(',');
-                if (m >= n + 1)
-                {
-                    DataRow dr = dt.NewRow();
-                    for (int i = 0; i < split.Length; i++)
-                    {
-                        dr[i] = split[i];
-                        //Console.Write(dr[i].ToString()+",");
-                    }
-                    //Console.WriteLine("\r\n");
-                    dt.Rows.Add(dr);
-                }
-            }
-            reader.Close();
-            return dt;
         }
 
         public int GetMaxIndex(double[] arr)
         {
             int max_index = 0;
-            for(int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
                 if (arr[i] >= arr[max_index])
                 {
@@ -251,99 +160,129 @@ namespace MLP
             return max_index;
         }
 
-        private void GetRules_Click(object sender, EventArgs e)
+        public void Test()
         {
-            if (this.csv_file == "")
+            test_number = Convert.ToInt32(TestRows.Text);
+            double count = 0;
+            double right = 0;
+            for (int i = train_number; i < (test_number + train_number); i++)
             {
-                content_box.Text += "Please select the CSV file!\r\n";
+                double[] input = new double[30];
+                for (int sensor_i = 0; sensor_i < 30; sensor_i++)
+                {
+                    input[sensor_i] = Convert.ToDouble(dt.Rows[i][sensor_i]);
+                }
+
+                int real_res = Convert.ToInt32(dt.Rows[i][30]);
+                double[] res = network.Compute(input);
+                if (real_res == GetMaxIndex(res))
+                {
+                    right+=1;
+                }
+                count+=1;
+            }
+            double final_accuracy = (right / test_number) * 100.0;
+            Accuracy.Text = final_accuracy.ToString() + "%";
+        }
+
+        private void test_button_Click(object sender, EventArgs e)
+        {
+            if (.csv_file == "")
+            {
+                content_box.Text += "Data set not yet selected!\r\n";
             }
             else
             {
-                dt = CsvToDataTable(this.csv_file, 0);
-                string str = GetRules2String();
+                Test();
+            }
+        }
+
+        public DataTable Csv2DataTable(string filePath, int n)
+        {
+            DataTable dt = new DataTable();
+            //load the file
+            StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default, false);
+            int m = 0;
+            DataColumn column;
+            //load the column
+            for (int col = 0; col < 31; col++)
+            {
+                column = new DataColumn();
+                column.DataType = Type.GetType("System.String");
+                column.ColumnName = col.ToString();
+                dt.Columns.Add(column);
+            }
+            //load the rows data
+            while (!reader.EndOfStream)
+            {
+                m = m + 1;
+                string str = reader.ReadLine();
+                //Parsing row data
+                string[] split = str.Split(',');
+                if (m >= n + 1)
+                {
+                    DataRow dr = dt.NewRow();
+                    for (int i = 0; i < split.Length; i++)
+                    {
+                        dr[i] = split[i];
+                    }
+                    dt.Rows.Add(dr);
+                }
+            }
+            reader.Close();
+            return dt;
+        }
+
+
+        private void GetRules_Click(object sender, EventArgs e)
+        {
+            if (csv_file == "")
+            {
+                content_box.Text += "Data set not yet selected!\r\n";
+            }
+            else
+            {
+                dt = Csv2DataTable(this.csv_file, 0);
+                string str = Rules2String();
+                content_box.Text = "";
                 content_box.Text += str;
             }
         }
 
-        public string GetRules2String()
+        public string Rules2String()
         {
             int count = dt.Rows.Count;
-            count = 10000;
             int[][] inputs = new int [count][];
             string[] labels = new string[count];
             int num = 0;
             foreach (DataRow dr in dt.Rows)
             {
-                if (num >= 10000)
-                {
-                    break;
-                }
-                //Console.WriteLine(dr[30].ToString());
                 int res = Convert.ToInt32(dr[30]);
-                inputs[num] = new int[]{
-                    Convert.ToInt32(dr[0]), Convert.ToInt32(dr[1]), Convert.ToInt32(dr[2]),Convert.ToInt32(dr[3]),Convert.ToInt32(dr[4]),Convert.ToInt32(dr[5]),Convert.ToInt32(dr[6]),
-                    Convert.ToInt32(dr[7]),Convert.ToInt32(dr[8]),Convert.ToInt32(dr[9]),Convert.ToInt32(dr[10]),Convert.ToInt32(dr[11]),Convert.ToInt32(dr[12]),Convert.ToInt32(dr[13]),
-                    Convert.ToInt32(dr[14]),Convert.ToInt32(dr[15]),Convert.ToInt32(dr[16]),Convert.ToInt32(dr[17]),Convert.ToInt32(dr[18]),Convert.ToInt32(dr[19]),Convert.ToInt32(dr[20]),
-                    Convert.ToInt32(dr[21]),Convert.ToInt32(dr[22]),Convert.ToInt32(dr[23]),Convert.ToInt32(dr[24]),Convert.ToInt32(dr[25]),Convert.ToInt32(dr[26]),Convert.ToInt32(dr[27]),
-                    Convert.ToInt32(dr[28]),Convert.ToInt32(dr[29])};
-                labels[num] = "type-"+res.ToString();
+                inputs[num] = new int[30];
+                for (int sensor_i = 0; sensor_i < 30; sensor_i++)
+                {
+                    inputs[num][sensor_i] = Convert.ToInt32(dr[sensor_i]);
+                }
+                labels[num] = "class-"+res.ToString();
                 num++;
             }
             var codebook = new Codification("Output", labels);
             int[] outputs = codebook.Transform("Output", labels);
-            //for (int i = 0; i < outputs.Length;i++)
-            //{
-            //    Console.WriteLine(outputs[i].ToString());
-            //}
-            //return "";
-            var teacher = new C45Learning()
+
+            DecisionVariable[] dv = new DecisionVariable[30];
+            for(int i = 0; i < 30; i++)
             {
-                new DecisionVariable("sensor 1", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 2", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 3", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 4", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 5", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 6", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 7", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 8", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 9", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 10", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 11", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 12", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 13", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 14", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 15", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 16", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 17", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 18", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 19", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 20", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 21", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 22", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 23", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 24", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 25", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 26", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 27", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 28", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 29", DecisionVariableKind.Continuous),
-                new DecisionVariable("sensor 30", DecisionVariableKind.Continuous),
-            };
-            DecisionTree tree = teacher.Learn(inputs, outputs);
-
-            // To get the estimated class labels, we can use
+                string name = "sensor_" + (i+1).ToString();
+                dv[i] = new DecisionVariable(name, DecisionVariableKind.Continuous);
+            }
+            //use C45 Spanning tree algorithm
+            var C45 = new C45Learning(dv);
+            DecisionTree tree = C45.Learn(inputs, outputs);
+            
             int[] predicted = tree.Decide(inputs);
-
-            // The classification error (0.0266) can be computed as 
             double error = new ZeroOneLoss(outputs).Loss(predicted);
-
-            // Moreover, we may decide to convert our tree to a set of rules:
             DecisionSet rules = tree.ToRules();
-
-            // And using the codebook, we can inspect the tree reasoning:
-            string ruleText = rules.ToString(codebook, "Output",System.Globalization.CultureInfo.InvariantCulture);
-            Console.WriteLine(ruleText);
-            return ruleText;
+            return rules.ToString(codebook, "Output",System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }
